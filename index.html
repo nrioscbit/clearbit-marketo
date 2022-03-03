@@ -34,5 +34,78 @@
   };
   document.body.appendChild(script);
 </script>
+    
+    
+    <script type="text/javascript">
+      MktoForms2.whenReady(function(form) {
+
+    form.submittable(false);
+
+    let clearbitPolling = false;
+
+    form.onValidate(function(valid) {
+
+        let values = form.getValues();
+
+        if (clearbitPolling || !valid) {
+
+            console.log("clearbit polling or invalid so form not submittable");
+
+            return form.submittable(false);
+
+        } else {
+
+            if (valid && values.clearbitFormStatus && values.clearbitFormStatus !== "") {
+
+                console.log("clearbit form status not null and valid, so form is submittable");
+
+                return form.submittable(true);
+
+            } else {
+
+                console.log("clearbit is polling");
+
+                clearbitPolling = true;
+
+ 
+
+                let start = Date.now();
+
+                let poll = setInterval(function() {
+
+                    if (form.getValues().clearbitFormStatus && form.getValues().clearbitFormStatus !== "") {
+
+                        console.log("clearbit received data during polling interval");
+
+                        clearInterval(poll);
+
+                        clearbitPolling = false;
+
+                    } else {
+
+                        if (Date.now() - start > 2000) {
+
+                            console.log("clearbit didn't receive data while polling");
+
+                            form.setValues({
+
+                                clearbitFormStatus: "not Enriched"
+
+                            })
+
+                        }
+
+                    }
+
+                }, 100)
+
+            }
+
+        }
+
+    })
+
+})
+    </script>
   </body>
 </html>
