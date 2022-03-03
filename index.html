@@ -55,13 +55,7 @@
 
         } else {
 
-            if (valid && values.clearbitFormStatus && values.clearbitFormStatus !== "") {
-
-                console.log("clearbit form status not null and valid, so form is submittable");
-
-                return form.submittable(true);
-
-            } else {
+            
 
                 console.log("clearbit is polling");
 
@@ -99,7 +93,7 @@
 
                 }, 100)
 
-            }
+            
 
         }
 
